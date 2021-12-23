@@ -1,6 +1,7 @@
 import Pkg
 using LinearAlgebra
 using Distributions
+using Plots
 
 struct SimpleGame
       γ  # discount factor
@@ -151,13 +152,11 @@ p = SimpleGame(simpleGame)
 HS = HierarchicalSoftmax(p, 0.5, 10)
 IBR = IteratedBestResponse(p, 100)
 
-#π = solve(IBR, p)
+print("Begin solving IBR...")
+π = solve(IBR, p)
+print("\nNash equilibrium: ")
+print(keys(π[1].p), keys(π[2].p))
+
+print("Begin solving HS")
 D = solve(HS, p)
-
-#print(π)
-
-for i = 2:100
-      print(i)
-      print(": ")
-      println(D[1].p[i])
-end
+bar(collect(keys(D[1].p)), collect(values(D[1].p)), orientation=:vertical)
