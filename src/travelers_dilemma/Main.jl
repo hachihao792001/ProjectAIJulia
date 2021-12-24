@@ -13,12 +13,7 @@ end
 struct Travelers end
 
 n_agents(simpleGame::Travelers) = 2
-
 ordered_actions(simpleGame::Travelers, i::Int) = 2:100
-ordered_joint_actions(simpleGame::Travelers) = vec(collect(Iterators.product([ordered_actions(simpleGame, i) for i in 1:n_agents(simpleGame)]...)))
-
-n_joint_actions(simpleGame::Travelers) = length(ordered_joint_actions(simpleGame))
-n_actions(simpleGame::Travelers, i::Int) = length(ordered_actions(simpleGame, i))
 
 struct SetCategorical{S}
       elements::Vector{S} # Set elements (could be repeated)
@@ -42,16 +37,16 @@ end
 
 function reward(simpleGame::Travelers, i::Int, a)
       if i == 1
-            noti = 2
+            notI = 2
       else
-            noti = 1
+            notI = 1
       end
-      if a[i] == a[noti]
+      if a[i] == a[notI]
             r = a[i]
-      elseif a[i] < a[noti]
+      elseif a[i] < a[notI]
             r = a[i] + 2
       else
-            r = a[noti] - 1
+            r = a[notI] - 1
       end
       return r
 end
@@ -152,11 +147,16 @@ p = SimpleGame(simpleGame)
 HS = HierarchicalSoftmax(p, 0.5, 10)
 IBR = IteratedBestResponse(p, 100)
 
-print("Begin solving IBR...")
+println("Begin solving Iterated Best Response...")
 π = solve(IBR, p)
-print("\nNash equilibrium: ")
-print(keys(π[1].p), keys(π[2].p))
+println("Done")
+print("Nash equilibrium: ")
+println(keys(π[1].p), keys(π[2].p))
 
-print("Begin solving HS")
+println("\nBegin solving Hierarchical Softmax...")
 D = solve(HS, p)
-bar(collect(keys(D[1].p)), collect(values(D[1].p)), orientation=:vertical)
+println("Done")
+for i = 2:100
+      println("$i : $(D[1].p[i])")
+end
+bar(collect(keys(D[1].p)), collect(values(D[1].p)), orientation = :vertical, legend = false)
