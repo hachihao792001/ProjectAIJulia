@@ -1,3 +1,4 @@
+
 struct POMG
     γ  # discount factor
     ℐ  # agents
