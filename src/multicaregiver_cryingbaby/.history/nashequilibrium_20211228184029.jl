@@ -45,6 +45,12 @@ end
 # Từ Conditional Plan, và Utility của POMG, chuyển về dạng Simple game và giải quyết theo NashEquilibrium của Simple Game 
 function solve(M::POMGNashEquilibrium, 𝒫::POMG)
     ℐ, γ, b, d = 𝒫.ℐ, 𝒫.γ, M.b, M.d
+    println(ℐ)
+    println(γ)
+    println(b)
+    println(d)
+    println(𝒫.𝒪)
+
     Π = create_conditional_plans(𝒫, d)
 
     U = Dict(π => utility(𝒫, b, π) for π in joint(Π))
