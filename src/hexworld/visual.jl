@@ -1,5 +1,8 @@
 include("hexWorld.jl")
 
+#uncomment to use
+# using Pkg
+# Pkg.add("Luxor")
 using Luxor
 
 #hàm tô màu cho từng cell
