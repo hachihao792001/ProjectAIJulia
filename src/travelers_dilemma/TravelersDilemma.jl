@@ -34,7 +34,9 @@ function joint_reward(simpleGame::Travelers, a)
       return [reward(simpleGame, i, a) for i in 1:n_agents(simpleGame)]
 end
 
+# phân phối từng mảng trong X với nhau
 joint(X) = vec(collect(Iterators.product(X...)))
+# thay thế phần tử vị trí i trong π thành πi 
 joint(π, πi, i) = [i == j ? πi : πj for (j, πj) in enumerate(π)]
 
 function utility(𝒫::SimpleGame, π, i)

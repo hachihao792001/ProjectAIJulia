@@ -4,18 +4,17 @@ include("./TravelersDilemma.jl")
 include("./HierarchicalSoftmax.jl")
 include("./IteratedBestResponse.jl")
 
-
 simpleGame = Travelers()
 p = SimpleGame(simpleGame)
 
-HS = HierarchicalSoftmax(p, 0.5, 10)
 IBR = IteratedBestResponse(p, 100)
+HS = HierarchicalSoftmax(p, 0.5, 10)
 
 println("Begin solving Iterated Best Response...")
 π = solve(IBR, p)
 println("Done")
 print("Nash equilibrium: ")
-println(keys(π[1].p), keys(π[2].p))
+println(π[1].p, " ", π[2].p)
 
 println("\nBegin solving Hierarchical Softmax...")
 D = solve(HS, p)
