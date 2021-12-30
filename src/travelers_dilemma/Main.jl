@@ -41,6 +41,7 @@ function reward(simpleGame::Travelers, i::Int, a)
       else
             notI = 1
       end
+      
       if a[i] == a[notI]
             r = a[i]
       elseif a[i] < a[notI]

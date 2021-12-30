@@ -9,8 +9,7 @@ end
 function MGGradientAscent(𝒫::MG, i)
 	ℐ, 𝒮, 𝒜 = 𝒫.ℐ, 𝒫.𝒮, 𝒫.𝒜
 	Qi = Dict((s, a) => 0.0 for s in 𝒮, a in joint(𝒜))
-	uniform() = Dict(s => SimpleGamePolicy(ai => 1.0 for ai in 𝒫.𝒜[i])
-	for s in 𝒮)
+	uniform() = Dict(s => SimpleGamePolicy(ai => 1.0 for ai in 𝒫.𝒜[i]) for s in 𝒮)
 	return MGGradientAscent(𝒫, i, 1, Qi, uniform())
 end
 

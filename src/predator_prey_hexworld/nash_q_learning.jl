@@ -25,8 +25,7 @@ end
 
 function update!(πi::NashQLearning, s, a, s′)
 	𝒫, ℐ, 𝒮, 𝒜, R, γ = πi.𝒫, πi.𝒫.ℐ, πi.𝒫.𝒮, πi.𝒫.𝒜, πi.𝒫.R, πi.𝒫.γ
-	i
-	, Q, N = πi.i, πi.Q, πi.N
+	i, Q, N = πi.i, πi.Q, πi.N
 	M = NashEquilibrium()
 	𝒢 = SimpleGame(γ, ℐ, 𝒜, a′ -> [Q[j, s′, a′] for j in ℐ])
 	π = solve(M, 𝒢)

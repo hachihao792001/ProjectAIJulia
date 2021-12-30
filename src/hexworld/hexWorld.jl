@@ -48,9 +48,6 @@ struct HexWorldMDP
                         R[s,a] += r_bump_border*p_intended
                     end
                     T[s,a,s′] += p_intended  #tính tỷ lệ đi đến state 
-                    if s==s'
-                        T[s,a,s′]=0.0
-                    end
 
                     # Unintended veer left.
                     a_left = mod1(a+1, nA)
@@ -62,10 +59,7 @@ struct HexWorldMDP
                         R[s,a] += r_bump_border*p_veer
                     end
                     T[s,a,s′] += p_veer
-                    if s==s'
-                        T[s,a,s′]=0
-                    end
-
+                   
                     # Unintended veer right.
                     a_right = mod1(a-1, nA) # 0%6=6
                     neigh_right = neighbors[a_right]
@@ -76,9 +70,7 @@ struct HexWorldMDP
                         R[s,a] += r_bump_border*p_veer
                     end
                     T[s,a,s′] += p_veer
-                    if s==s'
-                        T[s,a,s′]=0
-                    end
+                   
                 end
             else # nếu mảng Reward đã chứa key hex
                 # Action taken from an absorbing hex
@@ -126,7 +118,6 @@ end
 function createMDP(mdp::HexWorldMDP) #hàm khởi tạo 1 MDP
     return MDP(mdp.mdp.T, mdp.mdp.R, mdp.mdp.γ)
 end
-
 
 
 
