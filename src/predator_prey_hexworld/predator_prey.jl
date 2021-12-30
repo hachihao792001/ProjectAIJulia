@@ -1,43 +1,6 @@
-struct MGPolicy
-	p # dictionary mapping states to simple game policies
-	MGPolicy(p::Base.Generator) = new(Dict(p))
-end
-
-(πi::MGPolicy)(s, ai) = πi.p[s](ai)
-(πi::SimpleGamePolicy)(s, ai) = πi(ai)
-
-probability(𝒫::MG, s, π, a) = prod(πj(s, aj) for (πj, aj) in zip(π, a))
-reward(𝒫::MG, s, π, i) =
-	sum(𝒫.R(s,a)[i]*probability(𝒫,s,π,a) for a in joint(𝒫.𝒜))
-transition(𝒫::MG, s, π, s′) =
-	sum(𝒫.T(s,a,s′)*probability(𝒫,s,π,a) for a in joint(𝒫.𝒜))
-
-function policy_evaluation(𝒫::MG, π, i)
-	𝒮, 𝒜, R, T, γ = 𝒫.𝒮, 𝒫.𝒜, 𝒫.R, 𝒫.T, 𝒫.γ
-	p(s,a) = prod(πj(s, aj) for (πj, aj) in zip(π, a))
-	R′ = [sum(R(s,a)[i]*p(s,a) for a in joint(𝒜)) for s in 𝒮]
-	T′ = [sum(T(s,a,s′)*p(s,a) for a in joint(𝒜)) for s in 𝒮, s′ in 𝒮]
-	return (I - γ*T′)\R′
-end
-
-function best_response(𝒫::MG, π, i)
-	𝒮, 𝒜, R, T, γ = 𝒫.𝒮, 𝒫.𝒜, 𝒫.R, 𝒫.T, 𝒫.γ
-	T′(s,ai,s′) = transition(𝒫, s, joint(π, SimpleGamePolicy(ai), i), s′)
-	R′(s,ai) = reward(𝒫, s, joint(π, SimpleGamePolicy(ai), i), i)
-	πi = solve(MDP(γ, 𝒮, 𝒜[i], T′, R′))
-	return MGPolicy(s => SimpleGamePolicy(πi(s)) for s in 𝒮)
-end
-
-function softmax_response(𝒫::MG, π, i, λ)
-	𝒮, 𝒜, R, T, γ = 𝒫.𝒮, 𝒫.𝒜, 𝒫.R, 𝒫.T, 𝒫.γ
-	T′(s,ai,s′) = transition(𝒫, s, joint(π, SimpleGamePolicy(ai), i), s′)
-	R′(s,ai) = reward(𝒫, s, joint(π, SimpleGamePolicy(ai), i), i)
-	mdp = MDP(γ, 𝒮, joint(𝒜), T′, R′)
-	πi = solve(mdp)
-	Q(s,a) = lookahead(mdp, πi.U, s, a)
-	p(s) = SimpleGamePolicy(a => exp(λ*Q(s,a)) for a in 𝒜[i])
-	return MGPolicy(s => p(s) for s in 𝒮)
-end
+include("./mg_policy.jl")
+include("./best_response")
+include("./softmax_response")
 
 struct PredatorPreyHexWorldMG
     hexes::Vector{Tuple{Int, Int}}
