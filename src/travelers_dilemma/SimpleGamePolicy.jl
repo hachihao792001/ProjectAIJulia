@@ -2,10 +2,12 @@ include("./SimpleGame.jl")
 include("./SetCategorical.jl")
 
 struct SimpleGamePolicy
-      p # dictionary mapping actions to probabilities
+      p # dictionary bắt cặp actions và probabilities
       function SimpleGamePolicy(p::Base.Generator)
             return SimpleGamePolicy(Dict(p))
       end
+      # hàm lấy vào 1 dictionary các cặp (action, prob), tính phần trăm các prob trong tổng số prob,
+      # và gán lại phần trăm đó vào trong từ cặp, rồi trả về lại dictionary mới
       function SimpleGamePolicy(p::Dict)
             vs = collect(values(p))
             vs ./= sum(vs)

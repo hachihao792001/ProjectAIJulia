@@ -11,6 +11,7 @@ struct HierarchicalSoftmax
       π # initial policy
 end
 function HierarchicalSoftmax(𝒫::SimpleGame, λ, k)
+      # π một danh sách các danh sách SimpleGamePolicy của mỗi joint action trong joint action space của 𝒫
       π = [SimpleGamePolicy(ai => 1.0 for ai in 𝒜i) for 𝒜i in 𝒫.𝒜]
       return HierarchicalSoftmax(λ, k, π)
 end
