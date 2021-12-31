@@ -1,16 +1,18 @@
-include("./SimpleGame.jl")
-include("./SimpleGamePolicy.jl")
-
 # ----------------------------- Fictitious Play --------------------------------
 function simulate(𝒫::SimpleGame, π, k_max)
     for k = 1:k_max
-    a = [πi() for πi in π]
-    for πi in π
-    update!(πi, a)
-    end
+        a = [πi() for πi in π]
+        for πi in π
+            update!(πi, a)
+            # print(πi.i)
+            # print(πi.N)
+            if πi.i == 1
+                println(πi.πi)
+            end
+        end
     end
     return π
-    end
+end
 
 mutable struct FictitiousPlay
     𝒫 # simple game

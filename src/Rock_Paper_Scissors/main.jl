@@ -1,39 +1,36 @@
+
 include("./RockPaperScissors.jl")
-include("./IteratedBestResponse.jl")
+include("./NashEquilibrium.jl")
 include("./HierarchicalSoftmax.jl")
+include("./IteratedBestResponse.jl")
 include("./FictitiousPlay.jl")
 
-using Plots
 
-function main()
-    rps = RockPaperScissors()
-    simpleGameRPS = SimpleGame(rps)
+simpleGame = RockPaperScissors()
+p = SimpleGame(simpleGame)
 
+HS = HierarchicalSoftmax(p, 0.5, 10)
+IBR = IteratedBestResponse(p, 100)
+NQ = NashEquilibrium()
 
-    IBR = IteratedBestResponse(simpleGameRPS, 100) 
-    HS = HierarchicalSoftmax(simpleGameRPS,0.5,10)
-
-    println("Begin solving Iterated Best Response...")
-    println(solve(IBR, simpleGameRPS))
-    println("Done")
-
-    println("\nBegin solving Hierarchical Softmax...")
-    D = solve(HS, simpleGameRPS)
-    println("Done")
-
-    println("\nBegin solving Fictitious Play...")
-    pi = [(FictitiousPlay(simpleGameRPS,i)) for i in 1:2]
-    k_max=100
-    v = simulate(simpleGameRPS,pi,k_max)
-    println("Done")
-   
+println("Begin solving Nash Equilibrium...")
+solve(NQ,p)
+println("Done")
 
 
-end
+println("Begin solving Iterated Best Response...")
+solve(IBR, p)
+println("Done")
 
-main()
 
+# # println("\nBegin solving Hierarchical Softmax...")
+# # D = solve(HS, p)
+# # println("Done")
 
-
+println("\nBegin solving Fictitious Play...")
+pi = [(FictitiousPlay(p,i)) for i in 1:2]
+k_max=100
+v = simulate(p,pi,k_max)
+println("Done")
 
 
