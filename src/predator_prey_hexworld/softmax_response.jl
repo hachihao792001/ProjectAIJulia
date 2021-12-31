@@ -1,3 +1,5 @@
+include("./simplegame.jl")
+
 function softmax_response(𝒫::MG, π, i, λ)
 	𝒮, 𝒜, R, T, γ = 𝒫.𝒮, 𝒫.𝒜, 𝒫.R, 𝒫.T, 𝒫.γ
 	T′(s,ai,s′) = transition(𝒫, s, joint(π, SimpleGamePolicy(ai), i), s′)

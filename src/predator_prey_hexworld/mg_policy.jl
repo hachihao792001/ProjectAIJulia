@@ -1,3 +1,6 @@
+include("./simplegame.jl")
+include("./mg.jl")
+
 struct MGPolicy
 	p # dictionary mapping states to simple game policies
 	MGPolicy(p::Base.Generator) = new(Dict(p))

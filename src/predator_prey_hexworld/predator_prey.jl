@@ -1,6 +1,8 @@
 include("./mg_policy.jl")
-include("./best_response")
-include("./softmax_response")
+include("./best_response.jl")
+include("./softmax_response.jl")
+include("./discrete_mdp.jl")
+include("./hexWorld.jl")
 
 struct PredatorPreyHexWorldMG
     hexes::Vector{Tuple{Int, Int}}
@@ -115,7 +117,7 @@ end
 #     0.95
 # )
 
-function PredatorPreyHexWorld()
+function PredatorPreyHexWorldMG()
     PredatorPreyHexWorld = PredatorPreyHexWorldMG(
         [
          (-1, 2), (0, 2), (1, 2),
