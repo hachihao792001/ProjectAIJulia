@@ -46,11 +46,7 @@ function prune_dominated!(Π, 𝒫::POMG)
     end
 end
 
-# Cách giải quyết bài toán sau khi tối ưu:
-# Tạo conditional plan bằng cách vừa mở rộng, vừa loại bỏ các dư thừa để tối ưu conditional plan
-# Từ conditional plan và utility chuyển về dạng Simple game
-# Giai quyết bài toán theo Nash Equilibrium của Simple game
-# Hàm trả về 1  tuple chứa 2 plan của 2 agent đã thỏa mãn các điều kiện sao cho reward lớn nhất => suy ra được chuỗi action của mỗi agent
+    # Loại bỏ khác policy phụ thuộc, chuyển bài toán về SimpleGame và thực hiện NashEquilibrium
 function solveDP(M::POMGDynamicProgramming, 𝒫::POMG)
     ℐ, 𝒮, 𝒜, R, γ, b, d = 𝒫.ℐ, 𝒫.𝒮, 𝒫.𝒜, 𝒫.R, 𝒫.γ, M.b, M.d
     # Tạo ConditionalPlan
@@ -64,7 +60,6 @@ function solveDP(M::POMGDynamicProgramming, 𝒫::POMG)
 
     # Chuyển về dạng simple game
     𝒢 = SimpleGame(γ, ℐ, Π, π -> utility(𝒫, b, π))
-    # Giai quyết bài toán theo Nash Equilibrium của Simple game
     π = solveNE(NashEquilibrium(), 𝒢)
     return Tuple(argmax(πi.p) for πi in π)
 end

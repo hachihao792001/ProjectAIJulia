@@ -2,6 +2,8 @@ using Pkg
 Pkg.add("Parameters")
 using Parameters: @with_kw
 
+include("pomg.jl")
+
 # Khai báo cấu trúc của Crying Baby với các thuộc tính có giá trị mặc định
 @with_kw struct CryingBaby
     # hungry reward khi HUNGRY độc lập với các action khác 
@@ -184,4 +186,18 @@ end
 #joint reward
 joint_reward(pomg::BabyPOMG, b::Vector{Float64}, a) = sum(joint_reward(pomg, s, a) * b[s] for s in ordered_states(pomg))
 
+#-----------POMG------------------
+# Hàm tạo 1 POMG từ các thuộc tính của MultiCaregiverCryingBaby
+function POMG(pomg::BabyPOMG)
+    return POMG(
+        pomg.babyPOMDP.γ,
+        vec(collect(1:n_agents(pomg))),
+        ordered_states(pomg),
+        [ordered_actions(pomg, i) for i in 1:n_agents(pomg)],
+        [ordered_observations(pomg, i) for i in 1:n_agents(pomg)],
+        (s, a, s′) -> transition(pomg, s, a, s′),
+        (a, s′, o) -> joint_observation(pomg, a, s′, o),
+        (s, a) -> joint_reward(pomg, s, a)
+    )
+end
 

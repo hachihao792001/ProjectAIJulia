@@ -1,5 +1,4 @@
 include("multicaregiver.jl")
-
 struct POMG
     γ  # discount factor
     ℐ  # agents

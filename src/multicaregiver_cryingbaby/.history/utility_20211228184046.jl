@@ -1,4 +1,4 @@
-# Tính utility , vì công thức khá dài nên tách ra thành 3 hàm nhỏ để thực hiện
+
 
 function lookahead(𝒫::POMG, U, s, a)
     𝒮, 𝒪, T, O, R, γ = 𝒫.𝒮, joint(𝒫.𝒪), 𝒫.T, 𝒫.O, 𝒫.R, 𝒫.γ

@@ -1,4 +1,3 @@
-# Cấu trúc và các hàm hỗ trợ cho việc sử dụng Simple Game
 struct SimpleGame
     γ # discount factor
     ℐ # agents

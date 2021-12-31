@@ -1,15 +1,13 @@
 include("nashequilibrium.jl")
 
-# Cấu trúc của POMG theo dynamicprogramming
 struct POMGDynamicProgramming
-    b # giá belief khởi tạo 
-    d # độ cao của conditional plans
+    b # initial belief
+    d # depth of conditional plans
 end
 
 Pkg.add("JuMP")
 using JuMP
-    
-# Hàm kiểm tra xem policy  πi có phụ thuộc vào một policy khác theo công thức (... trong report)
+    # Hàm kiểm tra xem policy  πi có phụ thuộc vào một policy khác theo công thức (... trong report)
 function is_dominated(𝒫::POMG, Π, i, πi)
     ℐ, 𝒮 = 𝒫.ℐ, 𝒫.𝒮
     jointΠnoti = joint([Π[j] for j in ℐ if j ≠ i])
@@ -29,7 +27,7 @@ function is_dominated(𝒫::POMG, Π, i, πi)
 end
 
 using Random
-# Hàm thực hiện việc loại bỏ các policy có phụ thuộc
+    # Loại bỏ các policy phụ thuộc
 function prune_dominated!(Π, 𝒫::POMG)
     done = false
     while !done
@@ -46,11 +44,7 @@ function prune_dominated!(Π, 𝒫::POMG)
     end
 end
 
-# Cách giải quyết bài toán sau khi tối ưu:
-# Tạo conditional plan bằng cách vừa mở rộng, vừa loại bỏ các dư thừa để tối ưu conditional plan
-# Từ conditional plan và utility chuyển về dạng Simple game
-# Giai quyết bài toán theo Nash Equilibrium của Simple game
-# Hàm trả về 1  tuple chứa 2 plan của 2 agent đã thỏa mãn các điều kiện sao cho reward lớn nhất => suy ra được chuỗi action của mỗi agent
+    # Loại bỏ khác policy phụ thuộc, chuyển bài toán về SimpleGame và thực hiện NashEquilibrium
 function solveDP(M::POMGDynamicProgramming, 𝒫::POMG)
     ℐ, 𝒮, 𝒜, R, γ, b, d = 𝒫.ℐ, 𝒫.𝒮, 𝒫.𝒜, 𝒫.R, 𝒫.γ, M.b, M.d
     # Tạo ConditionalPlan
@@ -64,7 +58,6 @@ function solveDP(M::POMGDynamicProgramming, 𝒫::POMG)
 
     # Chuyển về dạng simple game
     𝒢 = SimpleGame(γ, ℐ, Π, π -> utility(𝒫, b, π))
-    # Giai quyết bài toán theo Nash Equilibrium của Simple game
     π = solveNE(NashEquilibrium(), 𝒢)
     return Tuple(argmax(πi.p) for πi in π)
 end

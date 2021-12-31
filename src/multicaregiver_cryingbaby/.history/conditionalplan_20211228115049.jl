@@ -1,4 +1,3 @@
-# Cấu trúc của 1 conditional plan gồm 1 root và các plan con 
 struct ConditionalPlan
     a # hành động tại root của conditionalplan tree
     subplans # 1 dictionanary ánh xạ từ jont action sang subplan
@@ -7,7 +6,7 @@ ConditionalPlan(a) = ConditionalPlan(a, Dict())
 (π::ConditionalPlan)() = π.a
 (π::ConditionalPlan)(o) = π.subplans[o]
 
-# Hàm tạo 1 Conditional Plan
+
 function create_conditional_plans(𝒫, d)
     ℐ, 𝒜, 𝒪 = 𝒫.ℐ, 𝒫.𝒜, 𝒫.𝒪
         # thực hiện với mỗi agent như sau

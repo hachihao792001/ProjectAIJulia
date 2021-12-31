@@ -45,14 +45,10 @@ end
 # Từ Conditional Plan, và Utility của POMG, chuyển về dạng Simple game và giải quyết theo NashEquilibrium của Simple Game 
 function solve(M::POMGNashEquilibrium, 𝒫::POMG)
     ℐ, γ, b, d = 𝒫.ℐ, 𝒫.γ, M.b, M.d
-    # Tạo conditional plan
     Π = create_conditional_plans(𝒫, d)
-    # Tính hàm utility
+
     U = Dict(π => utility(𝒫, b, π) for π in joint(Π))
-    # Chuyển về Simple Game
     𝒢 = SimpleGame(γ, ℐ, Π, π -> U[π])
-    # Dùng NashEquilibrium của Simple Game 
     π = solveNE(NashEquilibrium(), 𝒢)
-    # Trả về 1 tuple chứa plan của 2 agent thỏa điều kiện reward của agent là cao nhất => từ đó suy ra được chuỗi action của mỗi agent cần làm
     return Tuple(argmax(πi.p) for πi in π)
 end

@@ -64,7 +64,6 @@ function solveDP(M::POMGDynamicProgramming, 𝒫::POMG)
 
     # Chuyển về dạng simple game
     𝒢 = SimpleGame(γ, ℐ, Π, π -> utility(𝒫, b, π))
-    # Giai quyết bài toán theo Nash Equilibrium của Simple game
     π = solveNE(NashEquilibrium(), 𝒢)
     return Tuple(argmax(πi.p) for πi in π)
 end
