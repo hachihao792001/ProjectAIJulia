@@ -4,11 +4,10 @@ function simulate(𝒫::SimpleGame, π, k_max)
         a = [πi() for πi in π]
         for πi in π
             update!(πi, a)
-            # print(πi.i)
-            # print(πi.N)
-            if πi.i == 1
-                println(πi.πi)
-            end
+            print("Agent ")
+            print(πi.i)
+            print(πi.N)
+            println(πi.πi)
         end
     end
     return π
